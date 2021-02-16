@@ -1,0 +1,4 @@
+dist/
+MANIFEST
+proxies.txt
+test.py
