@@ -1,11 +1,8 @@
 import proxyMama
 
-x = proxyMama.Manager(set_timeout=True, timeout=10)
-x.load_file("proxies.txt")
-print(x.proxies)
-print(x.temp_proxies)
-j = x.random()
-print(j)
-print(x.proxies)
-j.release()
-print(x.proxies)
+manager = proxyMama.Manager()
+manager.load_file("proxies.txt")
+proxy = manager.random()
+print(proxy)
+proxyIP = proxy.release()
+print(proxyIP)

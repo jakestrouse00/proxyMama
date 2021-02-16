@@ -1,1 +1,2 @@
-from proxyMama import Proxy, Manager
+from .Manager import Manager
+from .Proxy import Proxy

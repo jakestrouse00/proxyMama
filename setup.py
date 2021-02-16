@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='proxyMama',  # How you named your package folder (proxyMama)
     packages=['proxyMama'],  # Chose the same as "name"
-    version='0.1',  # Start with a small number and increase it with every change you make
+    version='1.0',  # Start with a small number and increase it with every change you make
     license='GNU GPLv3',  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description='A simple proxy manager for your web scraping journey',  # Give a short description about your library
     author='Jake Strouse',  # Type in your name
@@ -15,7 +15,7 @@ setup(
     #     'beautifulsoup4',
     # ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
         'Intended Audience :: Developers',  # Define that your audience are developers
         'Topic :: Software Development :: Build Tools',
