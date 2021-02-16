@@ -1,0 +1,1 @@
+from proxyMama import Proxy, Manager
