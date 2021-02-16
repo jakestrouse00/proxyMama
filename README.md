@@ -1,2 +1,3 @@
-# proxy-manager
-An easy manager for your proxies when scraping the web
+# proxyMama
+A simple proxy manager for your web scraping journey
+
