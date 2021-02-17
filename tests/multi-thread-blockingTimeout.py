@@ -4,13 +4,16 @@ import time
 
 
 def use_proxy(manager):
-    # will block until a new proxy is ready
-    proxy = manager.random(blocking=True)
-    print(f"using proxy: {proxy.address()}\n")
-    time.sleep(2)
+    # will block until a new proxy is ready or it takes longer than 2 seconds to get a proxy
+    proxy = manager.random(blocking=True, timeout=2)
+    if proxy is not None:
+        print(f"using proxy: {proxy.address()}\n")
+        time.sleep(2)
 
-    proxy.release()
-    print(f"released proxy\n")
+        proxy.release()
+        print(f"released proxy\n")
+    else:
+        print("Proxy request timed out\n")
 
 
 manager = Manager(single_use=True)

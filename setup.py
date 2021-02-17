@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='proxyMama',  # How you named your package folder (proxyMama)
     packages=['proxyMama'],  # Chose the same as "name"
-    version='1.2',  # Start with a small number and increase it with every change you make
+    version='1.3',  # Start with a small number and increase it with every change you make
     license='GNU GPLv3',  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description='A simple proxy manager for your web scraping journey',  # Give a short description about your library
     author='Jake Strouse',  # Type in your name
