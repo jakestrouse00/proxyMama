@@ -24,33 +24,39 @@ class Manager:
         for proxy in proxies:
             self.proxies.append({"proxy": str(proxy), "in_use": False, "thread_lock": Lock(), "timeout_until": 0})
 
-    def random(self):
+    def random(self, blocking: bool = False):
         """
+        :arg blocking: A boolean which describes whether or not to block until a valid proxy is found or return None.
+
         Chooses a random proxy from the proxy list. If the proxy can be used, the object Proxy() is returned. Otherwise None is returned.
         This is thread safe, because each proxy has a Lock() that must be free before any data a read/manipulated.
 
         :return: Proxy() object or None if no proxy can be found."""
-        proxy = random.choice(self.proxies)
-        proxyIndex = self.proxies.index(proxy)
-        proxy['thread_lock'].acquire()
-        if self.single_use:
-            if not proxy['in_use']:
-                if self.set_timeout:
-                    current_time = int(time.time())
-                    if current_time >= proxy['timeout_until']:
+        while True:
+            proxy = random.choice(self.proxies)
+            proxyIndex = self.proxies.index(proxy)
+            proxy['thread_lock'].acquire()
+            if self.single_use:
+                if not proxy['in_use']:
+                    if self.set_timeout:
+                        current_time = int(time.time())
+                        if current_time >= proxy['timeout_until']:
+                            proxy['in_use'] = True
+                            if self.set_timeout:
+                                proxy['timeout_until'] = int(time.time()) + self.timeout
+                            self.proxies[proxyIndex] = proxy
+                            proxy['thread_lock'].release()
+                            return Proxy(proxy, self)
+                    else:
+
                         proxy['in_use'] = True
-                        if self.set_timeout:
-                            proxy['timeout_until'] = int(time.time()) + self.timeout
                         self.proxies[proxyIndex] = proxy
                         proxy['thread_lock'].release()
                         return Proxy(proxy, self)
-                else:
+            else:
+                self.proxies[proxyIndex] = proxy
+                proxy['thread_lock'].release()
+                return Proxy(proxy, self)
 
-                    proxy['in_use'] = True
-                    self.proxies[proxyIndex] = proxy
-                    proxy['thread_lock'].release()
-                    return Proxy(proxy, self)
-        else:
-            self.proxies[proxyIndex] = proxy
-            proxy['thread_lock'].release()
-            return Proxy(proxy, self)
+            if not blocking:
+                return None
