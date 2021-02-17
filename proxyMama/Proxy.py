@@ -1,4 +1,4 @@
-from multiprocessing import Lock
+from threading import Lock
 import time
 import random
 
@@ -20,7 +20,7 @@ class Proxy:
         It is unclear if this will work for multiprocessing, but it should work for multithreading
         """
         proxyIndex = self.manager.temp_proxies.index(self.proxy['proxy'])
-        self.manager.proxies[proxyIndex]['thread_lock'].acquire()
+        # self.manager.proxies[proxyIndex]['thread_lock'].acquire()
         self.proxy['in_use'] = False
         self.manager.proxies[proxyIndex] = self.proxy
-        self.manager.proxies[proxyIndex]['thread_lock'].release()
+        # self.manager.proxies[proxyIndex]['thread_lock'].release()

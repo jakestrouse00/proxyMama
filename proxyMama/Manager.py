@@ -1,4 +1,4 @@
-from multiprocessing import Lock
+from threading import Lock
 import time
 import random
 from .Proxy import Proxy
@@ -22,7 +22,8 @@ class Manager:
             proxies = f.read().splitlines()
         self.temp_proxies = proxies
         for proxy in proxies:
-            self.proxies.append({"proxy": str(proxy), "in_use": False, "thread_lock": Lock(), "timeout_until": 0})
+            proxyLock = Lock()
+            self.proxies.append({"proxy": str(proxy), "in_use": False, "thread_lock": proxyLock, "timeout_until": 0})
 
     def random(self, blocking: bool = False):
         """
@@ -35,9 +36,9 @@ class Manager:
         while True:
             proxy = random.choice(self.proxies)
             proxyIndex = self.proxies.index(proxy)
-            proxy['thread_lock'].acquire()
-            if self.single_use:
-                if not proxy['in_use']:
+            if not proxy['in_use']:
+                proxy['thread_lock'].acquire()
+                if self.single_use:
                     if self.set_timeout:
                         current_time = int(time.time())
                         if current_time >= proxy['timeout_until']:
@@ -47,16 +48,18 @@ class Manager:
                             self.proxies[proxyIndex] = proxy
                             proxy['thread_lock'].release()
                             return Proxy(proxy, self)
+                        else:
+                            proxy['thread_lock'].release()
                     else:
 
                         proxy['in_use'] = True
                         self.proxies[proxyIndex] = proxy
                         proxy['thread_lock'].release()
                         return Proxy(proxy, self)
-            else:
-                self.proxies[proxyIndex] = proxy
-                proxy['thread_lock'].release()
-                return Proxy(proxy, self)
+                else:
+                    self.proxies[proxyIndex] = proxy
+                    proxy['thread_lock'].release()
+                    return Proxy(proxy, self)
 
             if not blocking:
                 return None
