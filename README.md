@@ -8,6 +8,10 @@ A simple proxy manager for your web scraping journey
 - No external packages
 - Highly customizable
 
+### Installation
+#### With pip
+`pip install proxyMama`
+
 ## Examples
 
 #### Single-thread
