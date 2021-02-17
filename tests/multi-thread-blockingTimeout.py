@@ -1,4 +1,4 @@
-from proxyMama import Manager
+import proxyMama
 import threading
 import time
 
@@ -17,7 +17,7 @@ def use_proxy(manager):
         print("Proxy request timed out\n")
 
 
-manager = Manager(single_use=True)
+manager = proxyMama.Manager(single_use=True)
 manager.load_file("proxies.txt")
 # giving an example of what happens if all proxies are in use and blocking = True.
 for i in range(8):
